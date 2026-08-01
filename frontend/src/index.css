@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-void text-mint font-body antialiased;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(47, 230, 166, 0.07), transparent),
+      repeating-linear-gradient(0deg, rgba(223, 255, 238, 0.015) 0px, rgba(223, 255, 238, 0.015) 1px, transparent 1px, transparent 3px);
+  }
+  ::selection {
+    @apply bg-jade text-void;
+  }
+  *:focus-visible {
+    outline: 2px solid #2fe6a6;
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply bg-panel border border-hairline rounded-md;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 bg-jade text-void font-display font-medium
+      px-5 py-2.5 text-sm tracking-wide transition-all hover:shadow-glow hover:brightness-110
+      disabled:opacity-40 disabled:pointer-events-none;
+    clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 border border-hairline text-mint/80 font-display
+      px-5 py-2.5 text-sm tracking-wide transition-all hover:border-jade hover:text-jade
+      disabled:opacity-40 disabled:pointer-events-none;
+    clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+  }
+  .input-field {
+    @apply w-full bg-panelRaised border border-hairline rounded-sm px-3 py-2 text-sm text-mint font-mono
+      placeholder:text-muted focus:border-jade focus:outline-none transition-colors;
+  }
+  .label {
+    @apply block text-xs uppercase tracking-[0.15em] text-muted font-mono mb-1.5;
+  }
+}
+
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 12px rgba(47, 230, 166, 0.55);
+  }
+  .scanline-overlay {
+    position: relative;
+    overflow: hidden;
+  }
+  .scanline-overlay::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent, rgba(47, 230, 166, 0.08) 40%, transparent 80%);
+    animation: scan 5s linear infinite;
+    pointer-events: none;
+  }
+}
+
+/* Redacted glyph block used for encrypted/locked placeholder text */
+.redacted-glyphs {
+  display: inline-block;
+  font-family: "IBM Plex Mono", monospace;
+  color: #6e9683;
+  letter-spacing: 0.08em;
+  filter: blur(0.2px);
+  animation: flicker 6s ease-in-out infinite;
+}
+
+/* Decrypt reveal: characters sweep in with a jade scan-line as content unlocks */
+@keyframes decryptSweep {
+  0% {
+    clip-path: inset(0 100% 0 0);
+    filter: brightness(2) blur(1px);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    filter: brightness(1) blur(0);
+  }
+}
+.decrypt-reveal {
+  animation: decryptSweep 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  position: relative;
+}
+.decrypt-reveal::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(47, 230, 166, 0.9), transparent);
+  width: 6px;
+  animation: sweepBar 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes sweepBar {
+  0% { left: -2%; opacity: 1; }
+  100% { left: 100%; opacity: 0; }
+}
