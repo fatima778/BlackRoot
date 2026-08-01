@@ -5,14 +5,6 @@ import { useAuth } from "../context/AuthContext";
 import { GlitchText } from "../components/GlitchText";
 import { NetworkCanvas } from "../components/NetworkCanvas";
 
-const DEMO_ACCOUNTS = [
-  { role: "guest", email: "guest@blackroot.dev" },
-  { role: "verified", email: "verified@blackroot.dev" },
-  { role: "operative", email: "operative@blackroot.dev" },
-  { role: "sysadmin", email: "sysadmin@blackroot.dev" },
-];
-const DEMO_PASSWORD = "NeonBreach#2026";
-
 function EyeIcon({ visible }: { visible: boolean }) {
   return visible ? (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -36,12 +28,6 @@ export function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [shakeKey, setShakeKey] = useState(0);
-
-  function fillDemo(demoEmail: string) {
-    setEmail(demoEmail);
-    setPassword(DEMO_PASSWORD);
-    setError(null);
-  }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -189,27 +175,6 @@ export function LoginPage() {
               </Link>
             </p>
           </motion.div>
-
-          <div className="mt-5 panel p-4">
-            <p className="text-[10px] text-muted font-mono uppercase tracking-widest mb-2.5 text-center">
-              quick-fill demo accounts
-            </p>
-            <div className="grid grid-cols-2 gap-2">
-              {DEMO_ACCOUNTS.map((acc) => (
-                <motion.button
-                  key={acc.role}
-                  whileTap={{ scale: 0.96 }}
-                  onClick={() => fillDemo(acc.email)}
-                  className="text-[11px] font-mono text-muted hover:text-jade border border-hairline hover:border-jade/50 rounded-sm py-1.5 transition-colors"
-                >
-                  {acc.role}
-                </motion.button>
-              ))}
-            </div>
-            <p className="text-[10px] text-muted/70 font-mono text-center mt-2.5">
-              password: {DEMO_PASSWORD}
-            </p>
-          </div>
         </div>
       </div>
     </div>
