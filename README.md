@@ -197,3 +197,103 @@ the auth cookie on every subsequent request.
 Fonts: JetBrains Mono / IBM Plex Mono for terminal & data text, Inter for body copy.
 
 ## Folder map
+
+\`\`\`
+blackroot/
+├── backend/
+│   ├── src/
+│   │   ├── config/
+│   │   │   └── db.ts                    Mongo connection
+│   │   ├── models/
+│   │   │   ├── User.ts
+│   │   │   ├── Session.ts               revocable refresh-token sessions
+│   │   │   ├── ActivationCode.ts        shared, sysadmin-controlled signup code
+│   │   │   ├── Channel.ts
+│   │   │   ├── Entry.ts                 threads + nested replies
+│   │   │   └── AuditLog.ts
+│   │   ├── utils/
+│   │   │   ├── roles.ts                 role hierarchy — single source of truth
+│   │   │   ├── codeGenerator.ts         shared generator: recovery + activation codes
+│   │   │   ├── tokens.ts                JWT sign/verify
+│   │   │   └── asyncHandler.ts
+│   │   ├── middleware/
+│   │   │   ├── auth.ts                  JWT verification from httpOnly cookie
+│   │   │   ├── rbac.ts                  requireClearance / requireSysadmin
+│   │   │   ├── rateLimit.ts
+│   │   │   └── errorHandler.ts
+│   │   ├── validators/
+│   │   │   ├── authValidators.ts
+│   │   │   └── entryValidators.ts
+│   │   ├── controllers/
+│   │   │   ├── authController.ts        register, login, verify, password recovery
+│   │   │   ├── channelController.ts
+│   │   │   ├── entryController.ts       clearance-filtered queries live here
+│   │   │   └── adminController.ts       users, channels, entries, activation, audit log
+│   │   ├── routes/
+│   │   │   ├── authRoutes.ts
+│   │   │   ├── channelRoutes.ts
+│   │   │   ├── entryRoutes.ts
+│   │   │   └── adminRoutes.ts
+│   │   ├── __tests__/
+│   │   │   ├── setup.ts                 in-memory MongoDB for isolated tests
+│   │   │   ├── roles.test.ts
+│   │   │   └── access-control.test.ts   no-leak + privilege-escalation guarantees
+│   │   ├── app.ts                       express app + middleware wiring
+│   │   ├── server.ts                    entry point
+│   │   └── seed.ts                      demo accounts, channels, storyline content
+│   ├── .env.example
+│   ├── jest.config.js
+│   ├── package.json
+│   └── tsconfig.json
+│
+└── frontend/
+    ├── src/
+    │   ├── api/
+    │   │   └── client.ts                 typed API surface (Role, Entry, Channel, SearchResult)
+    │   ├── context/
+    │   │   └── AuthContext.tsx           current-user state, login/register/verify/recovery
+    │   ├── components/
+    │   │   ├── TerminalLayout.tsx        authenticated app shell + responsive nav
+    │   │   ├── RoleBadge.tsx
+    │   │   ├── GlitchText.tsx
+    │   │   ├── NetworkCanvas.tsx         animated particle-network background
+    │   │   ├── FloatingReadouts.tsx
+    │   │   ├── SparkleBurst.tsx
+    │   │   ├── LockedEntryCard.tsx       redacted placeholder for gated content
+    │   │   ├── HamburgerButton.tsx
+    │   │   ├── PasswordStrengthMeter.tsx
+    │   │   ├── RecoveryCodeReveal.tsx
+    │   │   ├── AnimatedCounter.tsx
+    │   │   ├── FAQAccordion.tsx
+    │   │   └── RequireAuth.tsx           route guard (auth + minRole)
+    │   ├── pages/
+    │   │   ├── Landing.tsx               public marketing page
+    │   │   ├── Login.tsx
+    │   │   ├── Register.tsx
+    │   │   ├── Verify.tsx                community rules + self-verification
+    │   │   ├── ForgotPassword.tsx        recovery-code-based reset
+    │   │   ├── Forum.tsx                 channel list (dashboard)
+    │   │   ├── Channel.tsx               entries within a channel
+    │   │   ├── Entry.tsx                 thread view, replies, flag, edit
+    │   │   ├── SearchResults.tsx
+    │   │   ├── Admin.tsx                 sysadmin console, 5 tabs
+    │   │   └── NotFound.tsx
+    │   ├── utils/
+    │   │   └── roles.ts                  UI-only clearance helper (server re-enforces everything)
+    │   ├── App.tsx                       route definitions
+    │   ├── main.tsx                      React entry point
+    │   └── index.css                     Tailwind + terminal effects (scanline, decrypt-reveal)
+    ├── index.html
+    ├── vercel.json                       SPA rewrite — required for direct nav/refresh
+    ├── package.json
+    ├── tailwind.config.ts
+    └── vite.config.ts
+\`\`\`
+
+
+## Known gaps / where to extend next
+
+- No pagination on entry or audit lists yet (fine at current scale, add `skip`/`limit` before real volume)
+- No profile/settings page (the API returns join date and post count, but there's no UI to view your own)
+- No WebSocket layer — replies require a refresh to see others' new posts
+- No file/image uploads — entries are text-only
