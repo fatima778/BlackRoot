@@ -182,15 +182,6 @@ Because the frontend and backend live on different domains in production, auth c
 navigations, so without this the deployed frontend would appear to log in successfully but silently fail to send
 the auth cookie on every subsequent request.
 
-<<<<<<< HEAD
-### ⚠️ Before going live with real users
-The seeded demo accounts and the demo activation code are committed to this repo and documented above — anyone
-who reads this file knows them. Before treating a deployment as production-real:
-- Delete the seeded demo accounts, or at minimum reset their passwords via the recovery-code flow
-- Regenerate the activation code from the Admin console's Activation tab
-- Rotate `JWT_ACCESS_SECRET` / `JWT_REFRESH_SECRET` if they were ever committed or shared anywhere
-=======
->>>>>>> d53e31be31fdd9fe355d44e6ad06cd53d36f88f3
 
 ## Design tokens (Tailwind, `tailwind.config.ts`)
 
@@ -207,11 +198,7 @@ Fonts: JetBrains Mono / IBM Plex Mono for terminal & data text, Inter for body c
 
 ## Folder map
 
-<<<<<<< HEAD
 ```
-=======
-\`\`\`
->>>>>>> d53e31be31fdd9fe355d44e6ad06cd53d36f88f3
 blackroot/
 ├── backend/
 │   ├── src/
@@ -301,12 +288,7 @@ blackroot/
     ├── package.json
     ├── tailwind.config.ts
     └── vite.config.ts
-<<<<<<< HEAD
 ```
-=======
-\`\`\`
-
->>>>>>> d53e31be31fdd9fe355d44e6ad06cd53d36f88f3
 
 ## Known gaps / where to extend next
 
